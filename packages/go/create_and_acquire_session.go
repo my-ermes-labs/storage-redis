@@ -3,7 +3,7 @@ package redis_commands
 import (
 	"context"
 
-	"github.com/ermes-labs/api-go/api"
+	"github.com/my-ermes-labs/api-go/api"
 )
 
 // Creates a new session and acquires it. Returns the id of the session.

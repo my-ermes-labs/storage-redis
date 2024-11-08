@@ -3,7 +3,7 @@ package redis_commands
 import (
 	"context"
 
-	"github.com/ermes-labs/api-go/api"
+	"github.com/my-ermes-labs/api-go/api"
 )
 
 // Garbage collect sessions, the options to define how the sessions are

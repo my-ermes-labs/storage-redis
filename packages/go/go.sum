@@ -10,5 +10,7 @@ github.com/ermes-labs/api-go v0.0.2 h1:7B9fUaofvG+9+oRG4VjIlT7prsszWZwzyIms1dCKH
 github.com/ermes-labs/api-go v0.0.2/go.mod h1:xxZSUJdaeyIu4uCCvTmQzRYRAxZaW+Dy8Uo4oDRrngs=
 github.com/google/uuid v1.5.0 h1:1p67kYwdtXjb0gL0BPiP1Av9wiZPo5A8z2cWkTZ+eyU=
 github.com/google/uuid v1.5.0/go.mod h1:TIyPZe4MgqvfeYDBFedMoGGpEw/LqOeaOT+nhxU+yHo=
+github.com/my-ermes-labs/api-go v0.0.0-20241107172815-890f4392385f h1:sF4UXKksh1H2LYy3IFzaHGdlhQ6GRChsteV8LBjoFGA=
+github.com/my-ermes-labs/api-go v0.0.0-20241107172815-890f4392385f/go.mod h1:+AvBXjo+qFUsMf1c7eNAsS3jSz+T3HkLqWTbqxn9zEs=
 github.com/redis/go-redis/v9 v9.5.1 h1:H1X4D3yHPaYrkL5X06Wh6xNVM/pX0Ft4RV0vMGvLBh8=
 github.com/redis/go-redis/v9 v9.5.1/go.mod h1:hdY0cQFCN4fnSYT6TkisLufl/4W5UIXyv0b/CLO2V2M=
