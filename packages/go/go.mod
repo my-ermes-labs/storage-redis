@@ -4,7 +4,7 @@ go 1.23.1
 
 require github.com/redis/go-redis/v9 v9.7.0
 
-require github.com/my-ermes-labs/api-go v0.1.0
+require github.com/my-ermes-labs/api-go v0.1.2
 
 require (
 	github.com/cespare/xxhash/v2 v2.3.0 // indirect
