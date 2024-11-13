@@ -1,4 +1,4 @@
-module github.com/ermes-labs/storage-redis/packages/go
+module github.com/my-ermes-labs/storage-redis/packages/go
 
 go 1.22.0
 
