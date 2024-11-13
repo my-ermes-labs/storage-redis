@@ -3,7 +3,7 @@ package redis_commands
 import (
 	"context"
 
-	"github.com/my-ermes-labs/api-go/api"
+	"github.com/ermes-labs/api-go/api"
 	"github.com/redis/go-redis/v9"
 )
 

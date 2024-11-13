@@ -3,8 +3,8 @@ package redis_commands
 import (
 	"context"
 
-	"github.com/my-ermes-labs/api-go/api"
-	"github.com/my-ermes-labs/api-go/infrastructure"
+	"github.com/ermes-labs/api-go/api"
+	"github.com/ermes-labs/api-go/infrastructure"
 )
 
 // Return the best sessions to offload. This list is composed by the session
