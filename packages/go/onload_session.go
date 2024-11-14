@@ -4,7 +4,7 @@ import (
 	"context"
 	"io"
 
-	"github.com/ermes-labs/api-go/api"
+	"github.com/my-ermes-labs/api-go/api"
 )
 
 // StartOnload starts the onload of a session and returns the id of the

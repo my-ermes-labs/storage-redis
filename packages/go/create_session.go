@@ -4,8 +4,8 @@ import (
 	"context"
 	"strconv"
 
-	"github.com/ermes-labs/api-go/api"
 	"github.com/google/uuid"
+	"github.com/my-ermes-labs/api-go/api"
 )
 
 // Creates a new session and returns the id of the session.
