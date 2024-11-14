@@ -11,5 +11,5 @@ func (c *RedisCommands) CreateAndAcquireSession(
 	ctx context.Context,
 	options api.CreateAndAcquireSessionOptions,
 ) (string, error) {
-	return "", nil
+	return "XXX", nil
 }
