@@ -11,7 +11,9 @@ func (c *RedisCommands) CreateAndAcquireSession(
 	ctx context.Context,
 	options api.CreateAndAcquireSessionOptions,
 ) (string, error) {
+	log("CREATE AND ACQUIRE SESSION")
 	sessionId, err := c.CreateSession(ctx, options.CreateSessionOptions)
+	log("SESSION ID = " + sessionId)
 	if err != nil {
 		_, err = c.AcquireSession(ctx, sessionId, options.AcquireSessionOptions)
 		if err != nil {
