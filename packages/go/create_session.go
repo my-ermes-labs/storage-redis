@@ -17,7 +17,9 @@ func (c *RedisCommands) CreateSession(
 	ctx context.Context,
 	opt api.CreateSessionOptions,
 ) (string, error) {
+	log("CREATE SESSION")
 	clientGeoCoordinates := opt.ClientGeoCoordinates()
+	log("coordinates = " + clientGeoCoordinates.String())
 	var latitude, longitude = "", ""
 	if clientGeoCoordinates != nil {
 		latitude = strconv.FormatFloat(clientGeoCoordinates.Latitude, 'f', 6, 64)
