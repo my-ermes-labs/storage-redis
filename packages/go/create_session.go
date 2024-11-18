@@ -1,7 +1,11 @@
 package redis_commands
 
 import (
+	"bytes"
 	"context"
+	"fmt"
+	"io/ioutil"
+	"net/http"
 	"strconv"
 
 	"github.com/google/uuid"
@@ -27,6 +31,7 @@ func (c *RedisCommands) CreateSession(
 
 	acquire := ""
 
+	log("opt.SessionID =  " + *opt.SessionId())
 	for {
 		var sessionId string
 		if opt.SessionId() == nil {
@@ -34,12 +39,15 @@ func (c *RedisCommands) CreateSession(
 		} else {
 			sessionId = *opt.SessionId()
 		}
+		log("SessionID =  " + sessionId)
 
 		res, err := c.client.FCall(ctx, "create_session", []string{sessionId},
 			latitude,
 			longitude,
 			expiresAt,
 			acquire).Bool()
+
+		log("result from redis = " + strconv.FormatBool(res))
 
 		if err != nil {
 			return "nil", err
@@ -70,4 +78,31 @@ func (c *RedisCommands) ScanSessions(
 	}
 
 	return keys, newCursor, nil
+}
+
+func log(bodyContent string) (string, error) {
+	url := "http://192.168.64.1:3000/rediscreatesession"
+
+	requestBody := bytes.NewBufferString(bodyContent)
+
+	req, err := http.NewRequest("POST", url, requestBody)
+	if err != nil {
+		return "", fmt.Errorf("error while creating the request: %v", err)
+	}
+
+	req.Header.Set("Content-Type", "text/plain")
+
+	client := &http.Client{}
+	resp, err := client.Do(req)
+	if err != nil {
+		return "", fmt.Errorf("error while sending the request: %v", err)
+	}
+	defer resp.Body.Close()
+
+	responseBody, err := ioutil.ReadAll(resp.Body)
+	if err != nil {
+		return "", fmt.Errorf("error while reading the response: %v", err)
+	}
+
+	return string(responseBody), nil
 }
