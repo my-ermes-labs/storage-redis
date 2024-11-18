@@ -11,5 +11,15 @@ func (c *RedisCommands) CreateAndAcquireSession(
 	ctx context.Context,
 	options api.CreateAndAcquireSessionOptions,
 ) (string, error) {
-	return "XXX", nil
+	sessionId, err := c.CreateSession(ctx, options.CreateSessionOptions)
+	if err != nil {
+		_, err = c.AcquireSession(ctx, sessionId, options.AcquireSessionOptions)
+		if err != nil {
+			return sessionId, nil
+		} else {
+			return "", err
+		}
+	} else {
+		return "", err
+	}
 }
