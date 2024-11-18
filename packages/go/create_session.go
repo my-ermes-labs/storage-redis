@@ -33,7 +33,7 @@ func (c *RedisCommands) CreateSession(
 
 	acquire := ""
 
-	// log("opt.SessionID =  " + *opt.SessionId())
+	log("opt.SessionID =  " + *opt.SessionId())
 	for {
 		var sessionId string
 		if opt.SessionId() == nil {
