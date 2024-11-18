@@ -42,6 +42,10 @@ func (c *RedisCommands) CreateSession(
 			sessionId = *opt.SessionId()
 		}
 		log("REDIS CREATE SessionID =  " + sessionId)
+		log("REDIS CREATE latitude =  " + latitude)
+		log("REDIS CREATE longitude =  " + longitude)
+		log("REDIS CREATE expired at =  " + expiresAt)
+		log("REDIS CREATE acquire =  " + acquire)
 
 		res, err := c.client.FCall(ctx, "create_session", []string{sessionId},
 			latitude,
@@ -52,7 +56,7 @@ func (c *RedisCommands) CreateSession(
 		log("result from redis = " + strconv.FormatBool(res))
 
 		if err != nil {
-			log(fmt.Sprintf("error from redis create session call = %v ", err))
+			log(fmt.Sprintf("error from redis create session call = %v ", err.Error()))
 			return "nil", err
 		}
 
