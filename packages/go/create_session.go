@@ -33,7 +33,7 @@ func (c *RedisCommands) CreateSession(
 
 	acquire := ""
 
-	log("opt.SessionID =  " + *opt.SessionId())
+	// log("opt.SessionID =  " + *opt.SessionId())
 	for {
 		var sessionId string
 		if opt.SessionId() == nil {
@@ -41,7 +41,7 @@ func (c *RedisCommands) CreateSession(
 		} else {
 			sessionId = *opt.SessionId()
 		}
-		log("SessionID =  " + sessionId)
+		log("REDIS CREATE SessionID =  " + sessionId)
 
 		res, err := c.client.FCall(ctx, "create_session", []string{sessionId},
 			latitude,
