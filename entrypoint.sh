@@ -1,7 +1,7 @@
 #!/bin/bash
 
 # Start Redis in the background
-redis-server &
+redis-server /usr/local/etc/redis/redis.conf --protected-mode no & 
 
 # Function to check if Redis is ready
 redis_ready() {

@@ -1,5 +1,6 @@
 # Use the official Redis image as a parent image
-FROM redis
+FROM redis 
+COPY redis.conf /usr/local/etc/redis/redis.conf
 
 # Copy the Lua script and the custom entrypoint script into the container
 COPY ermeslib.lua /usr/local/bin/ermeslib.lua
