@@ -2,6 +2,7 @@ package redis_commands
 
 import (
 	"context"
+	"fmt"
 
 	"github.com/my-ermes-labs/api-go/api"
 )
@@ -20,23 +21,30 @@ func (c *RedisCommands) AcquireSession(ctx context.Context, sessionId string, op
 		allow_offloading = "0"
 	}
 
+	log("ACQUIRE SESSION; allow offloading = " + allow_offloading)
+
 	var allow_while_offloading string
 	if opt.AllowWhileOffloading() {
 		allow_while_offloading = "1"
 	} else {
 		allow_while_offloading = "0"
 	}
+	log("ACQUIRE SESSION; allow while offloading = " + allow_while_offloading)
 
 	res, err := c.client.FCall(ctx, "acquire_session", []string{sessionId}, allow_offloading, allow_while_offloading).StringSlice()
-
 	if err != nil {
+		log(fmt.Sprintf("err while acquiring session = %v", err))
 		return nil, err
 	}
+	log(fmt.Sprintf("acquisition result =%v ", res))
 
 	if len(res) == 3 {
 		offloaded_to_host, offloaded_to_session := res[1], res[2]
+		log("offloaded to host = " + offloaded_to_host + "offloaded to session = " + offloaded_to_session)
 
 		location := api.NewSessionLocation(offloaded_to_host, offloaded_to_session)
+
+		log(fmt.Sprintf("location =%v ", location))
 
 		return &location, nil
 	}
