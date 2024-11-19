@@ -29,8 +29,8 @@ func (c *RedisCommands) CreateSession(
 
 	expiresAt := ""
 	if opt.ExpiresAt() != nil {
-		// expiresAt = strconv.FormatInt(*opt.ExpiresAt(), 10)
-		expiresAt = "1732032892"
+		log(fmt.Sprintf("err from redis create session call = %v ", opt.ExpiresAt()))
+		expiresAt = strconv.FormatInt(*opt.ExpiresAt(), 10)
 	}
 
 	log("expiresAt = " + expiresAt)
