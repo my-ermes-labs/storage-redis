@@ -2,6 +2,7 @@ package redis_commands
 
 import (
 	"context"
+	"fmt"
 
 	"github.com/my-ermes-labs/api-go/api"
 )
@@ -15,13 +16,17 @@ func (c *RedisCommands) CreateAndAcquireSession(
 	sessionId, err := c.CreateSession(ctx, options.CreateSessionOptions)
 	log("SESSION ID = " + sessionId)
 	if err != nil {
+		log("creation done. SessionId = " + sessionId)
 		_, err = c.AcquireSession(ctx, sessionId, options.AcquireSessionOptions)
 		if err != nil {
+			log("acquisition done. SessionId = " + sessionId)
 			return sessionId, nil
 		} else {
+			log(fmt.Sprintf("Error during acquisition = %v ", err))
 			return "", err
 		}
 	} else {
+		log(fmt.Sprintf("Error during creation = %v ", err))
 		return "", err
 	}
 }

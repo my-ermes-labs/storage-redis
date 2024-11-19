@@ -65,6 +65,7 @@ func (c *RedisCommands) CreateSession(
 		}
 
 		if res {
+			log("res = TRUE ; SessionId = " + sessionId)
 			return sessionId, nil
 		} else if opt.SessionId() != nil {
 			return "", api.ErrSessionIdAlreadyExists
