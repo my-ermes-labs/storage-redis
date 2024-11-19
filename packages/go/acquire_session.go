@@ -15,13 +15,15 @@ import (
 // - ErrSessionIsOffloading: If the session is offloading and the required permission is read-write.
 func (c *RedisCommands) AcquireSession(ctx context.Context, sessionId string, opt api.AcquireSessionOptions) (*api.SessionLocation, error) {
 	var allow_offloading string
+
+	log("\nSTART ACQUISITION OF " + sessionId)
 	if opt.AllowOffloading() {
 		allow_offloading = "1"
 	} else {
 		allow_offloading = "0"
 	}
 
-	log("ACQUIRE SESSION; allow offloading = " + allow_offloading)
+	log("Allow offloading = " + allow_offloading)
 
 	var allow_while_offloading string
 	if opt.AllowWhileOffloading() {
@@ -29,14 +31,14 @@ func (c *RedisCommands) AcquireSession(ctx context.Context, sessionId string, op
 	} else {
 		allow_while_offloading = "0"
 	}
-	log("ACQUIRE SESSION; allow while offloading = " + allow_while_offloading)
+	log("Allow while offloading = " + allow_while_offloading)
 
 	res, err := c.client.FCall(ctx, "acquire_session", []string{sessionId}, allow_offloading, allow_while_offloading).StringSlice()
 
-	log(fmt.Sprintf("acquisition result =%v ", res))
+	log(fmt.Sprintf("Acquisition result =%v ", res))
 
 	if err != nil {
-		log(fmt.Sprintf("err while acquiring session = %v", err))
+		log(fmt.Sprintf("Error while acquiring session = %v", err))
 		return nil, err
 	}
 
