@@ -29,7 +29,7 @@ func (c *RedisCommands) CreateSession(
 
 	expiresAt := ""
 	if opt.ExpiresAt() != nil {
-		log(fmt.Sprintf("err from redis create session call = %v ", opt.ExpiresAt()))
+		log(fmt.Sprintf("Expires AT = %v ", *opt.ExpiresAt()))
 		expiresAt = strconv.FormatInt(*opt.ExpiresAt(), 10)
 	}
 
