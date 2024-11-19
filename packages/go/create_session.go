@@ -30,7 +30,7 @@ func (c *RedisCommands) CreateSession(
 	expiresAt := ""
 	if opt.ExpiresAt() != nil {
 		log(fmt.Sprintf("Expires AT = %v ", *opt.ExpiresAt()))
-		expiresAt = strconv.FormatInt(*opt.ExpiresAt(), 10)
+		expiresAt = strconv.FormatInt(*opt.ExpiresAt()+100, 10)
 	}
 
 	log("expiresAt = " + expiresAt)
