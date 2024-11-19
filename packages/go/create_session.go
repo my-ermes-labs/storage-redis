@@ -22,6 +22,7 @@ func (c *RedisCommands) CreateSession(
 	log("coordinates = " + clientGeoCoordinates.String())
 	var latitude, longitude = "", ""
 	if clientGeoCoordinates != nil {
+		log("client coordinates")
 		latitude = strconv.FormatFloat(clientGeoCoordinates.Latitude, 'f', 6, 64)
 		longitude = strconv.FormatFloat(clientGeoCoordinates.Longitude, 'f', 6, 64)
 	}
@@ -30,6 +31,8 @@ func (c *RedisCommands) CreateSession(
 	if opt.ExpiresAt() != nil {
 		expiresAt = strconv.FormatInt(*opt.ExpiresAt(), 10)
 	}
+
+	log("expiresAt = " + expiresAt)
 
 	acquire := ""
 
