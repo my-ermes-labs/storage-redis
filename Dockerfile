@@ -1,13 +1,6 @@
 # Use the official Redis image as a parent image
 FROM redis 
 
-RUN apt-get update && \
-    apt-get install -y build-essential tcl git wget && \
-    git clone https://github.com/RedisGears/RedisGears.git && \
-    cd RedisGears && \
-    make && \
-    make install
-    
 COPY redis.conf /usr/local/etc/redis/redis.conf
 
 # Copy the Lua script and the custom entrypoint script into the container
