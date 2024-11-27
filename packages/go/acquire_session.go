@@ -38,7 +38,7 @@ func (c *RedisCommands) AcquireSession(ctx context.Context, sessionId string, op
 	log(fmt.Sprintf("Acquisition result =%v ", res))
 
 	if err != nil {
-		log(fmt.Sprintf("Error while acquiring session = %v", err))
+		log(fmt.Sprintf("Error while acquiring session = %v. Res = %x", err, res))
 		return nil, err
 	}
 

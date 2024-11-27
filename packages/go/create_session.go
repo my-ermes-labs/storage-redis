@@ -59,7 +59,6 @@ func (c *RedisCommands) CreateSession(
 		log("result from redis = " + strconv.FormatBool(res))
 
 		if err != nil {
-			log(fmt.Sprintf("err.Error() from redis create session call = %v ", err.Error()))
 			log(fmt.Sprintf("err from redis create session call = %v ", err))
 			return "nil", err
 		}
