@@ -387,6 +387,9 @@ redis.register_function('acquire_session', function(keys, args)
 
     -- Parse the values.
     non_offloadable_uses, offloadable_uses = tonumber(non_offloadable_uses), tonumber(offloadable_uses)
+    if non_offloadable_uses == nil then non_offloadable_uses = 0 end
+    if offloadable_uses == nil then offloadable_uses = 0 end
+
     -- Get the current time.
     local time = redis.call('TIME')[1]
 
