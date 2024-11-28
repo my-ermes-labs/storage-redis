@@ -401,7 +401,8 @@ redis.register_function('acquire_session', function(keys, args)
     end
 
     -- If session is not ACTIVE or is expired, return an error.
-    if (state ~= 'ACTIVE' and state ~= 'OFFLOADING') or (tonumber(expires_at) ~= nil and tonumber(expires_at) < time) then
+    local timer = tonumber(expires_at)
+    if (state ~= 'ACTIVE' and state ~= 'OFFLOADING') or (timer ~= nil and timer < time) then
         return redis.error_reply('[Ermes]: Session is not ACTIVE, is expired or does not exist')
     end
 
