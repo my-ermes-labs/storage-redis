@@ -1,5 +1,5 @@
 # Use the official Redis image as a parent image
-FROM redis 
+FROM redis
 
 COPY redis.conf /usr/local/etc/redis/redis.conf
 
