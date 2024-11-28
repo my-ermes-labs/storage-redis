@@ -375,7 +375,7 @@ redis.register_function('acquire_session', function(keys, args)
     local session_id = keys[1]
     -- Args.
     local allow_offloading = args[1]
-    local allow_while_offloading = args[1]
+    local allow_while_offloading = args[2] -- Modificato, seconda argomento era duplicato
     -- Metadata.
     local metadata_key = session_metadata_key(session_id)
 
@@ -386,26 +386,25 @@ redis.register_function('acquire_session', function(keys, args)
         result[1], result[2], result[3], result[4], result[5], result[6]
 
     -- Parse the values.
-    non_offloadable_uses, offloadable_uses = tonumber(non_offloadable_uses), tonumber(offloadable_uses)
-    if non_offloadable_uses == nil then non_offloadable_uses = 0 end
-    if offloadable_uses == nil then offloadable_uses = 0 end
+    non_offloadable_uses = tonumber(non_offloadable_uses) or 0
+    offloadable_uses = tonumber(offloadable_uses) or 0
 
-    -- Get the current time.
-    local time = redis.call('TIME')[1]
+    -- Get the current time and convert expires_at.
+    local current_time = tonumber(redis.call('TIME')[1])
+    local timer = expires_at ~= nil and expires_at ~= "" and tonumber(expires_at) or nil
 
     -- If session is OFFLOADED, return the state of the session and the offloadedTo data.
     if state == 'OFFLOADED' then
         return { state, offloaded_to_host, offloaded_to_session }
     end
 
-    -- If session is not ACTIVE or is expired, return an error.
+    -- If session is offloading but not allowed, return an error.
     if allow_while_offloading ~= '1' and state == 'OFFLOADING' then
         return redis.error_reply('[Ermes]: Session is offloading')
     end
 
     -- If session is not ACTIVE or is expired, return an error.
-    local timer = tonumber(expires_at)
-    if (state ~= 'ACTIVE' and state ~= 'OFFLOADING') or (timer ~= nil and timer < time) then
+    if (state ~= 'ACTIVE' and state ~= 'OFFLOADING') or (timer ~= nil and timer < current_time) then
         return redis.error_reply('[Ermes]: Session is not ACTIVE, is expired or does not exist')
     end
 
@@ -420,7 +419,7 @@ redis.register_function('acquire_session', function(keys, args)
     redis.call('HMSET', metadata_key,
         'non_offloadable_uses', tostring(non_offloadable_uses),
         'offloadable_uses', tostring(offloadable_uses),
-        'updated_at', tostring(time))
+        'updated_at', tostring(current_time))
 
     if non_offloadable_uses == 1 then
         -- Remove it from the offloadable_sessions_set.
