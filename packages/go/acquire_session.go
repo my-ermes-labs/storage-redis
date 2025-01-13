@@ -5,6 +5,7 @@ import (
 	"fmt"
 
 	"github.com/my-ermes-labs/api-go/api"
+	"github.com/my-ermes-labs/log"
 )
 
 // Acquires a session. If the session has been offloaded and not acquired it
@@ -16,14 +17,14 @@ import (
 func (c *RedisCommands) AcquireSession(ctx context.Context, sessionId string, opt api.AcquireSessionOptions) (*api.SessionLocation, error) {
 	var allow_offloading string
 
-	log("\nSTART ACQUISITION OF " + sessionId)
+	log.MyLog("\nSTART ACQUISITION OF " + sessionId)
 	if opt.AllowOffloading() {
 		allow_offloading = "1"
 	} else {
 		allow_offloading = "0"
 	}
 
-	log("Allow offloading = " + allow_offloading)
+	log.MyLog("Allow offloading = " + allow_offloading)
 
 	var allow_while_offloading string
 	if opt.AllowWhileOffloading() {
@@ -31,24 +32,24 @@ func (c *RedisCommands) AcquireSession(ctx context.Context, sessionId string, op
 	} else {
 		allow_while_offloading = "0"
 	}
-	log("Allow while offloading = " + allow_while_offloading)
+	log.MyLog("Allow while offloading = " + allow_while_offloading)
 
 	res, err := c.client.FCall(ctx, "acquire_session", []string{sessionId}, allow_offloading, allow_while_offloading).StringSlice()
 
-	log(fmt.Sprintf("Acquisition result =%v ", res))
+	log.MyLog(fmt.Sprintf("Acquisition result =%v ", res))
 
 	if err != nil {
-		log(fmt.Sprintf("Error while acquiring session = %v. Res = %x", err, res))
+		log.MyLog(fmt.Sprintf("Error while acquiring session = %v. Res = %x", err, res))
 		return nil, err
 	}
 
 	if len(res) == 3 {
 		offloaded_to_host, offloaded_to_session := res[1], res[2]
-		log("offloaded to host = " + offloaded_to_host + "offloaded to session = " + offloaded_to_session)
+		log.MyLog("offloaded to host = " + offloaded_to_host + "offloaded to session = " + offloaded_to_session)
 
 		location := api.NewSessionLocation(offloaded_to_host, offloaded_to_session)
 
-		log(fmt.Sprintf("location =%v ", location))
+		log.MyLog(fmt.Sprintf("location =%v ", location))
 
 		return &location, nil
 	}

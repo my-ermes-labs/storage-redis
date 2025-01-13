@@ -5,6 +5,7 @@ import (
 	"fmt"
 
 	"github.com/my-ermes-labs/api-go/api"
+	"github.com/my-ermes-labs/log"
 )
 
 // Creates a new session and acquires it. Returns the id of the session.
@@ -12,22 +13,22 @@ func (c *RedisCommands) CreateAndAcquireSession(
 	ctx context.Context,
 	options api.CreateAndAcquireSessionOptions,
 ) (string, error) {
-	log("CREATE AND ACQUIRE SESSION")
+	log.MyLog("CREATE AND ACQUIRE SESSION")
 
 	sessionId, err := c.CreateSession(ctx, options.CreateSessionOptions)
-	log("SESSION ID = " + sessionId)
+	log.MyLog("SESSION ID = " + sessionId)
 	if err != nil {
-		log(fmt.Sprintf("Error during creation = %v ", err))
+		log.MyLog(fmt.Sprintf("Error during creation = %v ", err))
 		return "", err
 	}
 
-	log("creation done. SessionId = " + sessionId)
+	log.MyLog("creation done. SessionId = " + sessionId)
 	_, err = c.AcquireSession(ctx, sessionId, options.AcquireSessionOptions)
 	if err != nil {
-		log(fmt.Sprintf("Error during acquisition = %v ", err))
+		log.MyLog(fmt.Sprintf("Error during acquisition = %v ", err))
 		return "", err
 	}
 
-	log("acquisition done. SessionId = " + sessionId)
+	log.MyLog("acquisition done. SessionId = " + sessionId)
 	return sessionId, nil
 }

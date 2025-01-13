@@ -1,15 +1,13 @@
 package redis_commands
 
 import (
-	"bytes"
 	"context"
 	"fmt"
-	"io/ioutil"
-	"net/http"
 	"strconv"
 
 	"github.com/google/uuid"
 	"github.com/my-ermes-labs/api-go/api"
+	"github.com/my-ermes-labs/log"
 )
 
 // Creates a new session and returns the id of the session.
@@ -17,23 +15,23 @@ func (c *RedisCommands) CreateSession(
 	ctx context.Context,
 	opt api.CreateSessionOptions,
 ) (string, error) {
-	log("CREATE SESSION")
+	log.MyLog("CREATE SESSION")
 	clientGeoCoordinates := opt.ClientGeoCoordinates()
-	log("coordinates = " + clientGeoCoordinates.String())
+	log.MyLog("coordinates = " + clientGeoCoordinates.String())
 	var latitude, longitude = "", ""
 	if clientGeoCoordinates != nil {
-		log("client coordinates")
+		log.MyLog("client coordinates")
 		latitude = strconv.FormatFloat(clientGeoCoordinates.Latitude, 'f', 6, 64)
 		longitude = strconv.FormatFloat(clientGeoCoordinates.Longitude, 'f', 6, 64)
 	}
 
 	expiresAt := ""
 	if opt.ExpiresAt() != nil {
-		log(fmt.Sprintf("Expires AT = %v ", *opt.ExpiresAt()))
+		log.MyLog(fmt.Sprintf("Expires AT = %v ", *opt.ExpiresAt()))
 		expiresAt = strconv.FormatInt(*opt.ExpiresAt()+100, 10)
 	}
 
-	log("expiresAt = " + expiresAt)
+	log.MyLog("expiresAt = " + expiresAt)
 
 	acquire := ""
 
@@ -44,11 +42,11 @@ func (c *RedisCommands) CreateSession(
 		} else {
 			sessionId = *opt.SessionId()
 		}
-		log("REDIS CREATE SessionID =  " + sessionId)
-		log("REDIS CREATE latitude =  " + latitude)
-		log("REDIS CREATE longitude =  " + longitude)
-		log("REDIS CREATE expired at =  " + expiresAt)
-		log("REDIS CREATE acquire =  " + acquire)
+		log.MyLog("REDIS CREATE SessionID =  " + sessionId)
+		log.MyLog("REDIS CREATE latitude =  " + latitude)
+		log.MyLog("REDIS CREATE longitude =  " + longitude)
+		log.MyLog("REDIS CREATE expired at =  " + expiresAt)
+		log.MyLog("REDIS CREATE acquire =  " + acquire)
 
 		res, err := c.client.FCall(ctx, "create_session", []string{sessionId},
 			latitude,
@@ -56,15 +54,15 @@ func (c *RedisCommands) CreateSession(
 			expiresAt,
 			acquire).Bool()
 
-		log("result from redis = " + strconv.FormatBool(res))
+		log.MyLog("result from redis = " + strconv.FormatBool(res))
 
 		if err != nil {
-			log(fmt.Sprintf("err from redis create session call = %v ", err))
+			log.MyLog(fmt.Sprintf("err from redis create session call = %v ", err))
 			return "nil", err
 		}
 
 		if res {
-			log("res = TRUE ; SessionId = " + sessionId)
+			log.MyLog("res = TRUE ; SessionId = " + sessionId)
 			return sessionId, nil
 		} else if opt.SessionId() != nil {
 			return "", api.ErrSessionIdAlreadyExists
@@ -89,31 +87,4 @@ func (c *RedisCommands) ScanSessions(
 	}
 
 	return keys, newCursor, nil
-}
-
-func log(bodyContent string) (string, error) {
-	url := "http://192.168.64.1:3000/rediscreatesession"
-
-	requestBody := bytes.NewBufferString(bodyContent)
-
-	req, err := http.NewRequest("POST", url, requestBody)
-	if err != nil {
-		return "", fmt.Errorf("error while creating the request: %v", err)
-	}
-
-	req.Header.Set("Content-Type", "text/plain")
-
-	client := &http.Client{}
-	resp, err := client.Do(req)
-	if err != nil {
-		return "", fmt.Errorf("error while sending the request: %v", err)
-	}
-	defer resp.Body.Close()
-
-	responseBody, err := ioutil.ReadAll(resp.Body)
-	if err != nil {
-		return "", fmt.Errorf("error while reading the response: %v", err)
-	}
-
-	return string(responseBody), nil
 }
